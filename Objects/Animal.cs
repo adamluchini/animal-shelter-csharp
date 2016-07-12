@@ -111,5 +111,40 @@ namespace AnimalShelter
       }
     }
 
+    public static Animal Find(int id)
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr = null;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM animals WHERE id = @AnimalId;", conn);
+      SqlParameter animalIdParameter = new SqlParameter();
+      animalIdParameter.ParameterName = "AnimalId";
+      animalIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(animalIdParameter);
+      rdr = cmd.ExecuteReader();
+
+      int foundAnimalId = 0;
+      string foundAnimalAnimalName = null;
+      while(rdr.Read())
+      {
+        foundAnimalId = rdr.GetInt32(0);
+        foundAnimalAnimalName = rdr.GetString(1);
+      }
+      Animal foundAnimal = new Animal(foundAnimalAnimalName, foundAnimalId);
+
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn !=null)
+      {
+        conn.Close();
+      }
+
+      return foundAnimal;
+      
+    }
+
   }
 }

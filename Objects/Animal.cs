@@ -69,5 +69,19 @@ namespace AnimalShelter
       cmd.ExecuteNonQuery();
     }
 
+    public override bool Equals(System.Object otherAnimal)
+    {
+      if (!(otherAnimal is Animal))
+      {
+        return false;
+      }
+      else
+      {
+        Animal newAnimal = (Animal) otherAnimal;
+        bool nameEquality = (this.GetName() == newAnimal.GetName());
+        return (nameEquality);
+      }
+    }
+
   }
 }

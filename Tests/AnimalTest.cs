@@ -27,5 +27,16 @@ namespace AnimalShelter
       //Assert
       Assert.Equal(0, result);
     }
+
+    [Fact]
+    public void Test_Equal_ReturnsTrueIfDescriptionsAreTheSame()
+    {
+      //Arrange, Act
+      Animal firstAnimal = new Animal("Pickles");
+      Animal secondAnimal = new Animal("Pickles");
+
+      //Assert
+      Assert.Equal(firstAnimal, secondAnimal);
+    }
   }
 }

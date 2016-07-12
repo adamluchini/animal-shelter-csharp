@@ -38,5 +38,20 @@ namespace AnimalShelter
       //Assert
       Assert.Equal(firstAnimal, secondAnimal);
     }
+
+    [Fact]
+    public void Test_Save_SavesToDatabase()
+    {
+      //Arrange
+      Animal testAnimal = new Animal("Pickles");
+
+      //Act
+      testAnimal.Save();
+      List<Animal> result = Animal.GetAll();
+      List<Animal> testList = new List<Animal>{testAnimal};
+
+      //Assert
+      Assert.Equal(testList, result);
+    }
   }
 }

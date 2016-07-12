@@ -7,12 +7,12 @@ namespace AnimalShelter
   public class Animal
   {
     private int _id;
-    private string _name;
+    private string _animalName;
 
-    public Animal(string Name, int Id = 0)
+    public Animal(string AnimalName, int Id = 0)
     {
       _id = Id;
-      _name = Name;
+      _animalName = AnimalName;
     }
 
     public int GetId()
@@ -20,14 +20,14 @@ namespace AnimalShelter
       return _id;
     }
 
-    public string GetName()
+    public string GetAnimalName()
     {
-      return _name;
+      return _animalName;
     }
 
-    public void SetName(string newName)
+    public void SetAnimalName(string newAnimalName)
     {
-      _name = newName;
+      _animalName = newAnimalName;
     }
 
     public static List<Animal> GetAll()
@@ -44,8 +44,8 @@ namespace AnimalShelter
       while (rdr.Read())
       {
         int animalId = rdr.GetInt32(0);
-        string animalName = rdr.GetString(1);
-        Animal newAnimal = new Animal(animalName, animalId);
+        string animalAnimalName = rdr.GetString(1);
+        Animal newAnimal = new Animal(animalAnimalName, animalId);
         allAnimals.Add(newAnimal);
       }
 
@@ -78,8 +78,36 @@ namespace AnimalShelter
       else
       {
         Animal newAnimal = (Animal) otherAnimal;
-        bool nameEquality = (this.GetName() == newAnimal.GetName());
-        return (nameEquality);
+        bool animalNameEquality = (this.GetAnimalName() == newAnimal.GetAnimalName());
+        return (animalNameEquality);
+      }
+    }
+
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      SqlDataReader rdr;
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO animals (animal_name) OUTPUT INSERTED.id VALUES (@AnimalAnimalName);", conn);
+
+      SqlParameter animalNameParameter = new SqlParameter();
+      animalNameParameter.ParameterName = "@AnimalAnimalName";
+      animalNameParameter.Value = this.GetAnimalName();
+      cmd.Parameters.Add(animalNameParameter);
+      rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr.Read())
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
       }
     }
 
